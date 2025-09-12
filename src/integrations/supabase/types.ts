@@ -14,7 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          booking_date: string
+          booking_status: string
+          created_at: string
+          id: string
+          passengers: number
+          route_id: string
+          total_cost: number | null
+          travel_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_date?: string
+          booking_status?: string
+          created_at?: string
+          id?: string
+          passengers?: number
+          route_id: string
+          total_cost?: number | null
+          travel_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          booking_status?: string
+          created_at?: string
+          id?: string
+          passengers?: number
+          route_id?: string
+          total_cost?: number | null
+          travel_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "travel_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      travel_routes: {
+        Row: {
+          cost: number | null
+          created_at: string
+          distance: number | null
+          duration: number | null
+          from_location: string
+          id: string
+          route_type: string
+          to_location: string
+          user_id: string
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string
+          distance?: number | null
+          duration?: number | null
+          from_location: string
+          id?: string
+          route_type: string
+          to_location: string
+          user_id: string
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string
+          distance?: number | null
+          duration?: number | null
+          from_location?: string
+          id?: string
+          route_type?: string
+          to_location?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
