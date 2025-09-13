@@ -49,10 +49,7 @@ const Index = () => {
       });
       return;
     }
-    toast({
-      title: "Route Selected",
-      description: "Redirecting to booking confirmation...",
-    });
+    // Route selection is now handled by the RouteComparison component
   };
 
   const renderActiveTab = () => {

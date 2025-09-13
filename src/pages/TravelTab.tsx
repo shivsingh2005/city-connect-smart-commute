@@ -1,8 +1,10 @@
-import { ArrowLeft, MapPin, Navigation } from "lucide-react";
+import { ArrowLeft, MapPin, Navigation, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import RouteComparison from "@/components/travel/RouteComparison";
+import BookingHistory from "@/components/booking/BookingHistory";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface TravelTabProps {
   onRouteSelect: (routeId: string) => void;
@@ -49,8 +51,24 @@ export default function TravelTab({ onRouteSelect }: TravelTabProps) {
         </div>
       </Card>
 
-      {/* Route Comparison */}
-      <RouteComparison onRouteSelect={onRouteSelect} />
+      {/* Tabs for Routes and Bookings */}
+      <Tabs defaultValue="routes" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="routes">Available Routes</TabsTrigger>
+          <TabsTrigger value="bookings" className="flex items-center space-x-2">
+            <History size={16} />
+            <span>My Bookings</span>
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="routes">
+          <RouteComparison onRouteSelect={onRouteSelect} />
+        </TabsContent>
+        
+        <TabsContent value="bookings">
+          <BookingHistory />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

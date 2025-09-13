@@ -2,8 +2,10 @@ import { Clock, IndianRupee, Car, Bus, Train, Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useTravelRoutes } from "@/hooks/useTravelRoutes";
+import { useTravelRoutes, TravelRoute } from "@/hooks/useTravelRoutes";
 import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
+import BookingDialog from "@/components/booking/BookingDialog";
 
 const getRouteIcon = (type: string) => {
   switch (type.toLowerCase()) {
@@ -22,6 +24,8 @@ interface RouteComparisonProps {
 export default function RouteComparison({ onRouteSelect }: RouteComparisonProps) {
   const { routes, isLoading, createRoute, isCreating } = useTravelRoutes();
   const { user } = useAuth();
+  const [selectedRoute, setSelectedRoute] = useState<TravelRoute | null>(null);
+  const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
 
   const handleCreateSampleRoute = () => {
     if (!user) return;
@@ -114,16 +118,25 @@ export default function RouteComparison({ onRouteSelect }: RouteComparisonProps)
               </div>
               
               <Button 
-                onClick={() => onRouteSelect(route.id)}
-                className="w-full" 
-                variant="outline"
+                onClick={() => {
+                  setSelectedRoute(route);
+                  setBookingDialogOpen(true);
+                  onRouteSelect(route.id);
+                }}
+                className="w-full bg-gradient-primary hover:opacity-90" 
               >
-                Select Route
+                Book Route
               </Button>
             </Card>
           );
         })
       )}
+      
+      <BookingDialog
+        open={bookingDialogOpen}
+        onOpenChange={setBookingDialogOpen}
+        route={selectedRoute}
+      />
     </div>
   );
 }

@@ -34,7 +34,7 @@ export default function WalletTab() {
               Add Money
             </Button>
             <Button size="sm" variant="outline" className="flex-1">
-              History
+              Transaction History
             </Button>
           </div>
         </div>
