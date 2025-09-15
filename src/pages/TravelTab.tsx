@@ -3,14 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import RouteComparison from "@/components/travel/RouteComparison";
 import BookingHistory from "@/components/booking/BookingHistory";
+import MapRoute from "@/components/travel/MapRoute";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 interface TravelTabProps {
   onRouteSelect: (routeId: string) => void;
 }
 
 export default function TravelTab({ onRouteSelect }: TravelTabProps) {
+  const [fromLocation, setFromLocation] = useState("Koramangala");
+  const [toLocation, setToLocation] = useState("Electronic City");
+
   return (
     <div className="pb-20 px-4 pt-6">
       {/* Header */}
@@ -26,7 +31,8 @@ export default function TravelTab({ onRouteSelect }: TravelTabProps) {
             <Input 
               placeholder="From: Current Location" 
               className="flex-1"
-              defaultValue="Koramangala"
+              value={fromLocation}
+              onChange={(e) => setFromLocation(e.target.value)}
             />
             <Button variant="outline" size="icon">
               <Navigation size={16} />
@@ -38,7 +44,8 @@ export default function TravelTab({ onRouteSelect }: TravelTabProps) {
             <Input 
               placeholder="To: Enter destination" 
               className="flex-1"
-              defaultValue="Electronic City"
+              value={toLocation}
+              onChange={(e) => setToLocation(e.target.value)}
             />
             <Button variant="outline" size="icon">
               <MapPin size={16} />
@@ -49,7 +56,18 @@ export default function TravelTab({ onRouteSelect }: TravelTabProps) {
             Find Best Routes
           </Button>
         </div>
-      </Card>
+        </Card>
+
+      {/* Map Route */}
+      <div className="mb-6">
+        <MapRoute 
+          fromLocation={fromLocation} 
+          toLocation={toLocation}
+          onRouteCalculated={(distance, duration) => {
+            console.log(`Route calculated: ${distance}km, ${duration}min`);
+          }}
+        />
+      </div>
 
       {/* Tabs for Routes and Bookings */}
       <Tabs defaultValue="routes" className="space-y-4">
