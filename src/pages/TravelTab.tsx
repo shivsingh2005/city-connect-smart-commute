@@ -13,8 +13,9 @@ interface TravelTabProps {
 }
 
 export default function TravelTab({ onRouteSelect }: TravelTabProps) {
-  const [fromLocation, setFromLocation] = useState("Koramangala");
-  const [toLocation, setToLocation] = useState("Electronic City");
+  const [fromLocation, setFromLocation] = useState("");
+  const [toLocation, setToLocation] = useState("");
+  const [routeInfo, setRouteInfo] = useState<{distance: number, duration: number} | null>(null);
 
   return (
     <div className="pb-20 px-4 pt-6">
@@ -29,7 +30,7 @@ export default function TravelTab({ onRouteSelect }: TravelTabProps) {
           <div className="flex items-center space-x-3">
             <div className="w-3 h-3 bg-success rounded-full"></div>
             <Input 
-              placeholder="From: Current Location" 
+              placeholder="Enter your current location"
               className="flex-1"
               value={fromLocation}
               onChange={(e) => setFromLocation(e.target.value)}
@@ -42,7 +43,7 @@ export default function TravelTab({ onRouteSelect }: TravelTabProps) {
           <div className="flex items-center space-x-3">
             <div className="w-3 h-3 bg-destructive rounded-full"></div>
             <Input 
-              placeholder="To: Enter destination" 
+              placeholder="Enter your destination"
               className="flex-1"
               value={toLocation}
               onChange={(e) => setToLocation(e.target.value)}
@@ -52,22 +53,51 @@ export default function TravelTab({ onRouteSelect }: TravelTabProps) {
             </Button>
           </div>
           
-          <Button className="w-full bg-gradient-primary hover:opacity-90">
-            Find Best Routes
+          <Button 
+            className="w-full bg-gradient-primary hover:opacity-90"
+            onClick={() => {
+              if (fromLocation && toLocation) {
+                // Trigger recalculation - the MapRoute component will handle this automatically
+                console.log('Calculating route between:', fromLocation, 'and', toLocation);
+              }
+            }}
+          >
+            Calculate Distance & Find Routes
           </Button>
         </div>
         </Card>
 
+      {/* Distance Calculation Results */}
+      {routeInfo && (
+        <Card className="mb-6 p-4 bg-gradient-subtle border-primary/20">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-primary mb-2">Route Calculated</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-background/50 rounded-lg p-3">
+                <p className="text-sm text-muted-foreground">Distance</p>
+                <p className="text-xl font-bold text-primary">{routeInfo.distance} km</p>
+              </div>
+              <div className="bg-background/50 rounded-lg p-3">
+                <p className="text-sm text-muted-foreground">Duration</p>
+                <p className="text-xl font-bold text-primary">{routeInfo.duration} min</p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
       {/* Map Route */}
-      <div className="mb-6">
-        <MapRoute 
-          fromLocation={fromLocation} 
-          toLocation={toLocation}
-          onRouteCalculated={(distance, duration) => {
-            console.log(`Route calculated: ${distance}km, ${duration}min`);
-          }}
-        />
-      </div>
+      {fromLocation && toLocation && (
+        <div className="mb-6">
+          <MapRoute 
+            fromLocation={fromLocation} 
+            toLocation={toLocation}
+            onRouteCalculated={(distance, duration) => {
+              setRouteInfo({ distance, duration });
+            }}
+          />
+        </div>
+      )}
 
       {/* Tabs for Routes and Bookings */}
       <Tabs defaultValue="routes" className="space-y-4">
